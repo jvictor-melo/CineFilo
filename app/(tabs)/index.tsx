@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Image } from 'expo-image';
-import { Platform,  StyleSheet, Button, View, Text, Alert, } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Button, View, Text, Alert, } from 'react-native';
 
 import { HelloWave } from '@/components/hello-wave';
+
+//* Tradalho com eles depois
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -17,45 +19,35 @@ export default function HomeScreen() {
   // }
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#f3f3f3', dark: '#000000' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Cinefilo!</ThemedText>
+    <View style={styles.testContainer}>
+      <View style={styles.titleContainer}>
+        <Text>Cinefilo!</Text>
         <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.titleContainer}>
+      </View>
+      <View>
         <Button
-          color="#000000"
-          title="Clicou aqui"
+          color="#ff0000"
+          title="Clique aqui"
           onPress={() => setClicado(true)}
         />
-        {clicado && <ThemedText>Você clicou!</ThemedText>}
-      </ThemedView> 
-    </ParallaxScrollView>
+        {clicado && <Text style={styles.message}>Você clicou!</Text>}
+      </View> 
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  testContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    marginBottom: 20,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  message: {
+    marginTop: 10,
+    color: 'red'
+  }
 });
+
