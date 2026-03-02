@@ -1,6 +1,8 @@
+//TODO - Barra de Pesquisa, Lista de filmes abaixo, tudo organizado verticalmente (escrever codigo em ingles)
+
 import React, { useState } from 'react';
 import { Image } from 'expo-image';
-import { Platform, ScrollView, StyleSheet, Button, View, Text, Alert, } from 'react-native';
+import { Platform, ScrollView, FlatList, StyleSheet, Button, View, Text, Alert, TextInput, } from 'react-native';
 
 import { HelloWave } from '@/components/hello-wave';
 
@@ -9,45 +11,83 @@ import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
-  //const [valor, setValor] = useState(0)
-  const [clicado, setClicado] = useState(false)
 
-  // function SomarValor() {
-  //   setValor(valor + 1)
-  // }
+  const movies = [
+    {
+      id: '1',
+      title: 'Matrix',
+      overview: 'Um hacker descobre a verdade...',
+    },
+    {
+      id: '2',
+      title: 'Kung Fu Panda',
+      overview: 'Um panda vira dragao.',
+    },
+    {
+      id: '3',
+      title: 'Oi',
+      overview: 'Um hacker descobre a verdade...',
+    },
+    {
+      id: '4',
+      title: 'Kung Fu Tchay',
+      overview: 'Um panda vira dragao.',
+    },
+  ]
 
+  const [search, setSearch] = useState('')
+  const filteredMovies = movies.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
   return (
-    <View style={styles.testContainer}>
-      <View style={styles.titleContainer}>
-        <Text>Cinefilo!</Text>
-        <HelloWave />
+    <SafeAreaView style={styles.screenContainer}>
+      <View style={styles.searchBarContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder='Procure um filme...'
+          placeholderTextColor="gray"
+          value={search}
+          onChangeText={(text) => setSearch(text)}>          
+        </TextInput>
       </View>
-      <View>
-        <Button
-          color="#ff0000"
-          title="Clique aqui"
-          onPress={() => setClicado(true)}
-        />
-        {clicado && <Text style={styles.message}>Você clicou!</Text>}
-      </View> 
-    </View>
+      <FlatList 
+      numColumns={3}
+      data={filteredMovies}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <View style={styles.movieCard}>
+          <Text style={{ color: 'white', marginBottom: 10}}>
+            {item.title}
+          </Text>
+        </View>
+      )}
+      /> 
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  testContainer: {
+  screenContainer: {
+    backgroundColor: '#0000',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    paddingHorizontal: 20
   },
-  titleContainer: {
-    marginBottom: 20,
+  searchBarContainer: {
+    backgroundColor: '#2e2e2e',
+    color: 'white',
+    width: '100%',
+    borderRadius: 10,
+    padding: 10
   },
-  message: {
-    marginTop: 10,
-    color: 'red'
+  textInput: {
+    color: 'white'
+  },
+  movieCard: {
+    flex: 1,
+    margin: 5
   }
+
+
 });
 
