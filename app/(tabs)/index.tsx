@@ -1,46 +1,25 @@
 //TODO - Barra de Pesquisa, Lista de filmes abaixo, tudo organizado verticalmente (escrever codigo em ingles)
 
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Image } from 'expo-image';
-import { Platform, ScrollView, FlatList, StyleSheet, Button, View, Text, Alert, TextInput, } from 'react-native';
+import { Dimensions, FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
 
 //* Tradalho com eles depois
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
-
-  const movies = [
-    {
-      id: '1',
-      title: 'Matrix',
-      overview: 'Um hacker descobre a verdade...',
-    },
-    {
-      id: '2',
-      title: 'Kung Fu Panda',
-      overview: 'Um panda vira dragao.',
-    },
-    {
-      id: '3',
-      title: 'Oi',
-      overview: 'Um hacker descobre a verdade...',
-    },
-    {
-      id: '4',
-      title: 'Kung Fu Tchay',
-      overview: 'Um panda vira dragao.',
-    },
-  ]
+  const router = useRouter()
+  const [movies, setMovies] = useState([])
 
   const [search, setSearch] = useState('')
   const filteredMovies = movies.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
+  
+  //* Definindo a imagen como 1/3 pra ter so 3 cards ta tela sem serem dimensionados automaticamente
+  const screenWidth = Dimensions.get('window').width
+  const cardWidth = (screenWidth - 40 - 30) / 3
   return (
+    
     <SafeAreaView style={styles.screenContainer}>
       <View style={styles.searchBarContainer}>
         <TextInput
@@ -56,11 +35,19 @@ export default function HomeScreen() {
       data={filteredMovies}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <View style={styles.movieCard}>
-          <Text style={{ color: 'white', marginBottom: 10}}>
-            {item.title}
-          </Text>
-        </View>
+        <Pressable onPress={() => router.push({
+          pathname: '/movie/[id]',
+          params: { id: item.id }
+        })}>
+          <View style={[styles.movieCard, { width: cardWidth }]}>
+            <Image 
+              source={{ uri: item.poster}}
+              style={styles.image}/>
+            <Text style={{ color: 'white', marginBottom: 10}}>
+              {item.title}
+            </Text>
+          </View>
+        </Pressable>
       )}
       /> 
     </SafeAreaView>
@@ -69,7 +56,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   screenContainer: {
-    backgroundColor: '#0000',
+    backgroundColor: '#000000',
     flex: 1,
     paddingHorizontal: 20
   },
@@ -83,10 +70,15 @@ const styles = StyleSheet.create({
   textInput: {
     color: 'white'
   },
+  // RN é dominado por tres forças: flex, width/height, aspectRatio
   movieCard: {
-    flex: 1,
-    margin: 5
-  }
+    margin: 5,
+    aspectRatio: 2/3
+  },
+  image: {
+    width: '100%',
+    height: 150
+  },
 
 
 });
