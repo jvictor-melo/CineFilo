@@ -27,7 +27,7 @@ export default function HomeScreen() {
     const [page, setPage] = useState(1)
 
   async function fetchMovies(){
-    const url = `https://api.themoviedb.org/3/movie/popular?api_key=${tmbdKey}&language=pt-BR&&page=${page}`
+    const url = `https://api.themoviedb.org/3/movie/popular?api_key=${tmbdKey}&language=pt-BR&page=${page}`
     const response = await fetch(url)
     const data = await response.json()
     setMovies(prev => [...prev, ...data.results])
