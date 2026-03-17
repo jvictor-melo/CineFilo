@@ -50,7 +50,6 @@ export default function HomeScreen() {
     }
   }, [page, search])
 
-
   const filteredMovies = movies.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
   
   //* Definindo a imagen como 1/3 pra ter so 3 cards ta tela sem serem dimensionados automaticamente
